@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="cursor:url(./assets/cursor.svg) 2 1, auto;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>算栗工坊</title>
+  <meta name="description" content="每个知识点，都值得举个栗子。" />
+  <link rel="icon" href="./assets/chestnut.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <!-- 动态模糊背景 -->
+  <div class="bg-canvas-wrap">
+    <canvas data-bg></canvas>
+  </div>
+
+  <div class="page">
+    <!-- 导航（极简：分类入口都在下方漂浮卡里）-->
+    <nav class="navbar">
+      <a class="nav-brand" href="./index.html">算栗工坊</a>
+      <ul class="nav-links">
+        <li><a href="./index.html" class="active">首页</a></li>
+        <li><a href="#posts">文章</a></li>
+        <li><a href="https://github.com/suanlilog" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="./admin/">后台</a></li>
+      </ul>
+    </nav>
+
+    <!-- 围绕头像的散布舞台（大小不一的漂浮卡片，仿原站可拖拽布局）-->
+    <main class="stage" id="stage">
+      <!-- 中央栗子头像 -->
+      <div class="stage-center">
+        <img class="stage-avatar" src="./assets/chestnut.png" alt="算栗工坊" />
+        <h1 class="stage-title">算栗<span class="accent">工坊</span></h1>
+        <p class="stage-sub">每个知识点，都值得举个栗子。</p>
+      </div>
+
+      <!-- 围绕头像的漂浮卡：2 个入口 + 功能卡 -->
+      <!-- 1. 近期文章（大卡，左上）—— 点进去按时间排序看文章 -->
+      <div class="float-card fc-1 fc-lg fc-tall entry-card" data-go="posts">
+        <span class="fc-icon">📝</span>
+        <span class="fc-title">近期文章</span>
+        <span class="fc-desc">按时间顺序排列的全部文章，最新的在最上面。</span>
+      </div>
+
+      <!-- 2. 专题栏目（大卡，右上）—— 点进去按专题分类看文章 -->
+      <div class="float-card fc-2 fc-lg fc-tall entry-card" data-go="topics">
+        <span class="fc-icon">🗂️</span>
+        <span class="fc-title">专题栏目</span>
+        <span class="fc-desc">按主题分类浏览：Agent · Python · 工具 · 生活。</span>
+      </div>
+
+      <!-- 3. 时钟（小卡，左中）-->
+      <div class="float-card fc-3 fc-sm" id="clockCard">
+        <span class="fc-icon">🕐</span>
+        <span class="fc-title">时钟</span>
+        <div class="clock-time" id="clockTime">--:--:--</div>
+        <div class="clock-date" id="clockDate">--</div>
+      </div>
+
+      <!-- 4. 音乐（中卡，右中）-->
+      <div class="float-card fc-4 fc-md music" id="musicCard">
+        <span class="fc-icon">🎵</span>
+        <span class="fc-title">音乐</span>
+        <div class="music-row">
+          <button class="music-play" id="musicPlay" aria-label="播放/暂停">▶</button>
+          <div class="music-info">
+            <div class="title" id="musicTitle">点击播放</div>
+            <div class="music-bars"><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <audio id="audio" loop></audio>
+      </div>
+
+      <!-- 5. 随手记（中卡，左下）-->
+      <div class="float-card fc-5 fc-md fc-tall" id="noteCard">
+        <span class="fc-icon">✍️</span>
+        <span class="fc-title">随手记</span>
+        <textarea class="note-area" id="noteArea" placeholder="想到什么就写什么…（自动保存到本地）"></textarea>
+        <div class="note-hint">快捷键 <kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd> 保存</div>
+      </div>
+
+      <!-- 6. 日历（小卡，右下）-->
+      <div class="float-card fc-6 fc-sm" id="calCard">
+        <span class="fc-icon">📅</span>
+        <span class="fc-title">日历</span>
+        <span class="fc-desc" id="calInfo">--</span>
+        <span class="fc-desc" id="calWeek" style="color:var(--color-brand-dark);font-weight:600">--</span>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="./assets/bg.js"></script>
+  <script src="./assets/home.js"></script>
+</body>
+</html>

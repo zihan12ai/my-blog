@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="cursor:url(./assets/cursor.svg) 2 1, auto;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>近期文章 · 算栗工坊</title>
+  <link rel="icon" href="./assets/chestnut.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body class="list-page">
+  <div class="bg-canvas-wrap"><canvas data-bg></canvas></div>
+
+  <div class="page list-page-page">
+    <nav class="navbar">
+      <a class="nav-brand" href="./index.html">算栗工坊</a>
+      <ul class="nav-links">
+        <li><a href="./index.html">首页</a></li>
+        <li><a href="./posts.html" class="active">近期文章</a></li>
+        <li><a href="./topics.html">专题栏目</a></li>
+        <li><a href="https://github.com/suanlilog" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <div class="section-head"><span class="bar"></span><h2>近期文章</h2>
+        <a class="back-home" href="./index.html">← 回到首页</a>
+      </div>
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="post-grid" id="postGrid">
+        <div class="loading">加载中…</div>
+      </div>
+    </main>
+
+    <footer class="footer">© 2026 算栗工坊 · 每个知识点，都值得举个栗子。</footer>
+  </div>
+
+  <script src="./assets/bg.js"></script>
+  <script src="./assets/posts.js"></script>
+</body>
+</html>

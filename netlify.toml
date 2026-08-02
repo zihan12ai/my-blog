@@ -1,0 +1,22 @@
+# Netlify 配置 —— 算栗工坊
+# 构建全交给 Netlify（不再用 GitHub Action，避免重复）
+[build]
+  command = "python scripts/build.py"
+  publish = "."
+
+# admin 后台路由（访问 /admin 自动落到 index.html）
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+# JSON 正确 content-type
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
+  for = "/assets/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"

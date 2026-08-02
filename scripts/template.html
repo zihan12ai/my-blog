@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="cursor:url(./assets/cursor.svg) 2 1, auto;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>算栗工坊</title>
+  <link rel="icon" href="./assets/chestnut.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <div class="bg-canvas-wrap"><canvas data-bg></canvas></div>
+
+  <div class="page">
+    <nav class="navbar">
+      <a class="nav-brand" href="./index.html">算栗工坊</a>
+      <ul class="nav-links">
+        <li><a href="./index.html">首页</a></li>
+        <li><a href="./index.html#stage">Agent</a></li>
+        <li><a href="./index.html#stage">Python教程</a></li>
+        <li><a href="./index.html#stage">工具教程</a></li>
+        <li><a href="./index.html#stage">生活</a></li>
+      </ul>
+    </nav>
+
+    <main class="article-wrap">
+      <a class="back-link" href="./index.html">← 返回首页</a>
+      <article class="article-card">
+        <h1>从 conda 转 uv 快速上手</h1>
+        <div class="article-info">分类：Python教程 · 约 3 分钟阅读</div>
+        <div class="article-body">
+          <p>抛弃臃肿的 conda，用 Rust 写的 uv 快速管理 Python 环境与依赖。这篇举个栗子，讲讲怎么平滑迁移。</p>
+
+          <h2>为什么换 uv</h2>
+          <p>uv 用 Rust 写成，创建环境、装依赖的速度比 conda 快一个数量级，而且兼容 <code>requirements.txt</code> 和 <code>pyproject.toml</code>。</p>
+
+          <blockquote>每个知识点，都值得举个栗子 —— 这正是算栗工坊的初衷。</blockquote>
+
+          <h2>安装</h2>
+          <p>一行命令搞定：<code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></p>
+
+          <h2>常用命令</h2>
+          <p><code>uv venv</code> 建虚拟环境，<code>uv pip install</code> 装包，<code>uv sync</code> 按 lock 文件同步依赖。</p>
+
+          <h2>小结</h2>
+          <p>从 conda 迁到 uv 主要是一次性把依赖清单转过去，之后日常用起来会快很多。本篇是静态 demo 文章，正式文章请见仓库原文。</p>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">© 2026 算栗工坊 · 每个知识点，都值得举个栗子。 · Built with <span class="heart">♥</span> static HTML</footer>
+  </div>
+
+  <script src="./assets/bg.js"></script>
+</body>
+</html>

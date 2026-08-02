@@ -1,0 +1,15 @@
+# 构建产物（由 GitHub Action / build.py 自动生成，不入库）
+post-*.html
+assets/posts.json
+
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.pyc
+.netlify/
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.vscode/
+.idea/

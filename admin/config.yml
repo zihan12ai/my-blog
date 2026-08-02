@@ -1,0 +1,42 @@
+# Decap CMS 配置 —— 算栗工坊
+# 架构 A：只写 Markdown，Netlify 构建时 build.py 自动生成 posts.json + 文章页
+# 后端用 git-gateway，需在 Netlify 开启 Identity + Git Gateway（见 README 步骤3）
+
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: '新增文章: {{slug}}'
+    update: '更新文章: {{slug}}'
+
+# 本地调试用（需 npx decap-server + Node，可选）。生产环境保持 false
+local_backend: false
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "posts"
+    label: "文章"
+    label_singular: "文章"
+    folder: "posts"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    sort: "published:desc"
+    summary: "{{title}} · {{category}} · {{published}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "链接标识 slug", name: "slug", widget: "string", hint: "英文短横线标识，用于 URL，如 conda-to-uv" }
+      - label: "分类"
+        name: "category"
+        widget: "select"
+        options: ["Agent", "Python教程", "工具教程", "生活"]
+        default: "工具教程"
+      - { label: "标签", name: "tags", widget: "list", default: [], hint: "一行一个" }
+      - { label: "摘要", name: "summary", widget: "text" }
+      - { label: "发布日期", name: "published", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "更新日期", name: "updated", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false, hint: "改动文章时更新此项；晚于发布日期则首页显示[有更新]" }
+      - { label: "正文", name: "body", widget: "markdown" }
