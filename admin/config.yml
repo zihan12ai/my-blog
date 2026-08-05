@@ -1,15 +1,19 @@
 # Decap CMS 配置 —— 算栗工坊
 # 架构 A：只写 Markdown，Netlify 构建时 build.py 自动生成 posts.json + 文章页
-# 后端用 git-gateway，需在 Netlify 开启 Identity + Git Gateway（见 README 步骤3）
+# 后端：GitHub OAuth（不依赖 Netlify Identity）
+# 部署 OAuth 代理后，把 BASE_URL 改成你的代理地址（见下方 base_url）
 
 backend:
-  name: git-gateway
+  name: github
+  repo: zihan12ai/my-blog
   branch: main
+  base_url: https://suanli-oauth.727823293.workers.dev
+  auth_endpoint: auth
   commit_messages:
     create: '新增文章: {{slug}}'
     update: '更新文章: {{slug}}'
 
-# 本地调试用（需 npx decap-server + Node，可选）。生产环境保持 false
+# 本地调试用（需 npx decap-server + Node）。生产保持 false
 local_backend: false
 
 media_folder: "assets/uploads"
