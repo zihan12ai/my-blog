@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>算栗工坊 · 内容管理</title>
   <link rel="icon" href="../assets/chestnut.png" />
-  <!-- Decap CMS 核心脚本 -->
-  <script src="https://unpkg.com/decap-cms@^3.6.0/dist/decap-cms.js"></script>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; }
+    #nc-root { min-height: 100vh; }
+  </style>
 </head>
 <body>
-  <!-- Decap CMS 会在这里渲染编辑后台 -->
+  <div id="nc-root"></div>
+  <script src="https://unpkg.com/decap-cms@^3.6.0/dist/decap-cms.js"></script>
 </body>
 </html>

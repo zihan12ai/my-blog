@@ -20,3 +20,14 @@
   for = "/assets/*.json"
   [headers.values]
     Content-Type = "application/json; charset=utf-8"
+
+# YAML 正确 content-type（让 Decap CMS 能 fetch config.yml，而不是触发下载）
+[[headers]]
+  for = "/*.yml"
+  [headers.values]
+    Content-Type = "text/yaml; charset=utf-8"
+
+[[headers]]
+  for = "/admin/*.yml"
+  [headers.values]
+    Content-Type = "text/yaml; charset=utf-8"
