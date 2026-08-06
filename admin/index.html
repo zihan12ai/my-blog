@@ -15,8 +15,9 @@
       var p = new URLSearchParams(location.search);
       var token = p.get('token');
       if (token) {
-        // Decap CMS 期望的 localStorage 形状
-        localStorage.setItem('netlify-cms-user', JSON.stringify({ token: token, backendName: 'github' }));
+        // Decap CMS 3.x 期望的 localStorage 形状与键名。
+        // 注意：旧版 Netlify CMS 使用 netlify-cms-user；当前 Decap CMS 使用 decap-cms-user。
+        localStorage.setItem('decap-cms-user', JSON.stringify({ token: token, backendName: 'github' }));
         // 清掉 URL 上的 token，避免泄露/重复
         history.replaceState(null, '', location.pathname);
       }
