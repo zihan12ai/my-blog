@@ -9,6 +9,19 @@
     body { margin: 0; font-family: system-ui, sans-serif; }
     #nc-root { min-height: 100vh; }
   </style>
+  <!-- Boot 脚本：在 CMS 加载前，把回调带回的 token 写入 localStorage（绕过弹窗 opener 丢失问题）-->
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var token = p.get('token');
+      if (token) {
+        // Decap CMS 期望的 localStorage 形状
+        localStorage.setItem('netlify-cms-user', JSON.stringify({ token: token, backendName: 'github' }));
+        // 清掉 URL 上的 token，避免泄露/重复
+        history.replaceState(null, '', location.pathname);
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="nc-root"></div>
