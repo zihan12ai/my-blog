@@ -12,8 +12,11 @@
   <!-- Boot 脚本：在 CMS 加载前，把回调带回的 token 写入 localStorage（绕过弹窗 opener 丢失问题）-->
   <script>
     (function () {
+      // token 放在 URL fragment：不会发送给 Netlify，也不会出现在 Referer 中。
+      // 保留 query 读取，只为兼容曾经的旧回调链接。
       var p = new URLSearchParams(location.search);
-      var token = p.get('token');
+      var h = new URLSearchParams(location.hash.slice(1));
+      var token = h.get('token') || p.get('token');
       if (token) {
         // Decap CMS 3.x 期望的 localStorage 形状与键名。
         // 注意：旧版 Netlify CMS 使用 netlify-cms-user；当前 Decap CMS 使用 decap-cms-user。

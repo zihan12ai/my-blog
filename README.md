@@ -45,23 +45,40 @@ git push -u origin main
    - 若提示需要 Python，在 Netlify 站点设置里设环境变量 `PYTHON_VERSION=3.12`
 4. Deploy。完成后拿到一个 `xxx.netlify.app` 域名，打开能看到站点。
 
-### 步骤 3：开 Netlify Identity（让 /admin 能登录）
+### 步骤 3：建 GitHub OAuth App
 
-在 Netlify 站点后台：
-1. 顶部「Integrations」→「Identity」→ Enable Identity
-2. Registration：Open（或 Invite only 更安全，推荐只邀请自己）
-3. Services →「Git Gateway」Enable（这步让 CMS 能代你提交到 GitHub）
-4. 邀请自己：Identity 面板点「Invite users」填你的邮箱 → 收到邮件设密码
+1. 打开 https://github.com/settings/developers → **New OAuth App**
+2. 填：
+   - Application name：`suanli-cms`（随意）
+   - Homepage URL：`https://你的Netlify域名`（如 `https://suanligongfang.netlify.app`）
+   - Authorization callback URL：`https://你的OAuth代理域名/callback`
+     （代理域名下一步部署，先填或建完补，见步骤4）
+3. 建完拿到 **Client ID**；在该页点 **Generate a new client secret** 拿到 **Client Secret**
 
-### 步骤 4：登录后台写作
+### 步骤 4：部署 OAuth 代理（Cloudflare Worker，免费）
 
-1. 打开 `https://你的域名/admin`
-2. 用步骤3 设的邮箱密码登录
+Netlify 新版 Identity 不可用，改用自建 OAuth 代理。代码在 `scripts/oauth-worker.js`。
+
+1. 注册/登录 https://dash.cloudflare.com → Workers & Pages → Create Worker
+2. 把 `scripts/oauth-worker.js` 内容粘进编辑器。不要在代码里填写凭据。
+3. Worker → Settings → Variables and Secrets 中设置：
+   - `GITHUB_CLIENT_ID`：步骤3的 Client ID（普通变量即可）
+   - `GITHUB_CLIENT_SECRET`：步骤3的 Client Secret（选择 **Secret**）
+   - `SITE_URL`：`https://你的站点域名`（普通变量即可）
+4. Deploy。得到代理域名，如 `https://suanli-oauth.你的子域.workers.dev`
+5. 回到 GitHub OAuth App（步骤3），把 Authorization callback URL 改成
+   `https://你的代理域名/callback`
+6. 回到 `admin/config.yml`，把 `base_url` 改成你的代理域名（不带尾斜杠）
+
+### 步骤 5：登录后台写作
+
+1. 打开 `https://你的Netlify域名/admin/`
+2. 点登录 → 跳 GitHub 授权 → 回调拿 token
 3. 「文章」→「新增文章」→ 填标题/分类/标签/摘要/发布日期/正文 → 「发布」
-4. CMS 自动推 md 到 GitHub → **Netlify 检测到 push 自动跑 build.py 构建** → 发布上线
+4. CMS 自动推 md 到 GitHub → Netlify 检测到 push 自动跑 build.py → 发布上线
 5. 首页自动出现新文章，带「新文章」标签 ✅
 
-> 构建链路只有一条：CMS 推 md → Netlify 构建。没有 GitHub Action，不会冲突。
+> 构建链路：CMS 推 md → Netlify 构建。登录走 GitHub OAuth（Worker 代理）。
 
 ### 「有更新」标签怎么触发
 在后台编辑已有文章时，把「更新日期」改晚于「发布日期」→ 首页该文章显示橙色「有更新」。
