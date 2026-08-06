@@ -22,11 +22,6 @@
     return;
   }
 
-  // 判定 [新文章]/[有更新]
-  posts = posts.map(p => ({
-    ...p,
-    status: ((p.updated || p.published) > p.published) ? 'updated' : 'new',
-  }));
   posts.sort((a, b) => (b.updated || b.published).localeCompare(a.updated || a.published));
 
   // URL 预选分类（来自专题页跳转）
@@ -51,9 +46,6 @@
       grid.innerHTML = list.map(p => `
         <a class="post-card" href="./post-${p.slug}.html">
           <div class="cover"></div>
-          <div class="badges">
-            ${p.status === 'new' ? '<span class="badge new">新文章</span>' : '<span class="badge updated">有更新</span>'}
-          </div>
           <h3>${p.title}</h3>
           <p>${p.summary}</p>
           <div class="post-meta">
