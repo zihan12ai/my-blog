@@ -88,6 +88,30 @@ def md_to_html(md):
             class_name = f' class="language-{language}"' if language else ''
             out.append(f'<pre><code{class_name}>{html.escape("\\n".join(code))}</code></pre>')
             index += 1; continue
+        directive = re.match(r'^:::(example|details|key|pitfall)\s*(.*)$', line)
+        if directive:
+            flush_paragraph()
+            kind, title = directive.groups()
+            index += 1; nested = []
+            while index < len(lines) and lines[index].strip() != ':::':
+                nested.append(lines[index]); index += 1
+            # 未闭合时保留原文，避免一次手误吞掉后续正文。
+            if index >= len(lines):
+                paragraph.append(line)
+                paragraph.extend(nested)
+                break
+            index += 1
+            defaults = {
+                'example': '展开例子',
+                'details': '展开补充',
+                'key': '重点',
+                'pitfall': '易错点',
+            }
+            label = title or defaults[kind]
+            nested_md = chr(10).join(nested)
+            open_attr = ' open' if kind in ('key', 'pitfall') else ''
+            out.append(f'<details class="learning-details {kind}"{open_attr}><summary>{inline(label)}</summary>{md_to_html(nested_md)}</details>')
+            continue
         heading = re.match(r'^(#{1,3})\s+(.+)$', line)
         if heading:
             flush_paragraph(); level = len(heading.group(1)); heading_index += 1
@@ -126,12 +150,19 @@ def md_to_html(md):
 
 def build_toc(md):
     """从正文标题构建目录；围栏代码块内的 # 不应成为目录项。"""
-    items, in_code, heading_index = [], False, 0
+    items, in_code, in_directive, heading_index = [], False, False, 0
     for line in md.replace('\r\n', '\n').split('\n'):
         if line.startswith('```'):
             in_code = not in_code
             continue
         if in_code:
+            continue
+        if re.match(r'^:::(example|details|key|pitfall)\s*', line):
+            in_directive = True
+            continue
+        if in_directive:
+            if line.strip() == ':::':
+                in_directive = False
             continue
         heading = re.match(r'^(#{1,3})\s+(.+?)\s*$', line)
         if not heading:

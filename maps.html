@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识地图 · 算栗工坊</title>
+  <meta name="description" content="算栗工坊的学习主题地图。" />
+  <link rel="icon" href="./assets/chestnut.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body class="maps-page">
+  <div class="bg-canvas-wrap"><canvas data-bg></canvas></div>
+  <div class="page maps-page-shell">
+    <nav class="navbar">
+      <a class="nav-brand" href="./index.html">算栗工坊</a>
+      <ul class="nav-links">
+        <li><a href="./index.html">首页</a></li>
+        <li><a href="./posts.html">文章</a></li>
+        <li><a href="./topics.html">专题</a></li>
+        <li><a href="./maps.html" class="active">地图</a></li>
+      </ul>
+    </nav>
+    <main class="maps-wrap">
+      <header class="maps-heading">
+        <p class="profile-kicker">LEARNING MAPS</p>
+        <h1>知识<span>地图</span></h1>
+        <p>把正在学习的主题先画成树，再从节点进入具体文章。</p>
+      </header>
+      <section class="map-grid" aria-label="知识地图列表">
+        <article class="map-card">
+          <div class="map-card-heading"><span>🧩</span><div><p>IN PROGRESS</p><h2>AI Coding</h2></div></div>
+          <ul class="map-tree">
+            <li><span>AI Coding</span>
+              <ul>
+                <li><a href="./post-claude-code-cc-switch.html">Claude Code + CC Switch</a></li>
+                <li><a href="./post-open-code.html">OpenCode</a></li>
+                <li><a href="./posts.html?cat=Agent">Agent</a></li>
+              </ul>
+            </li>
+          </ul>
+        </article>
+        <article class="map-card map-card-empty">
+          <span>＋</span>
+          <h2>下一张地图</h2>
+          <p>以后可以在这里加入 Python、工具链、读书或任何正在生长的主题。</p>
+        </article>
+      </section>
+    </main>
+    <footer class="home-footer">© 2026 算栗工坊 · 每个知识点，都值得举个栗子。</footer>
+  </div>
+  <script src="./assets/bg.js"></script>
+</body>
+</html>
