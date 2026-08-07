@@ -54,4 +54,25 @@
   }
   renderRecentPosts();
 
+  const copyEmail = document.getElementById('copyEmail');
+  const emailFeedback = document.getElementById('emailCopyFeedback');
+  copyEmail?.addEventListener('click', async () => {
+    const email = copyEmail.dataset.email;
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      const input = document.createElement('textarea');
+      input.value = email;
+      input.setAttribute('readonly', '');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+    if (emailFeedback) emailFeedback.textContent = '邮箱已复制';
+    window.setTimeout(() => { if (emailFeedback) emailFeedback.textContent = ''; }, 1800);
+  });
+
 })();
