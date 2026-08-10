@@ -7,7 +7,7 @@
   <meta name="description" content="每个知识点，都值得举个栗子。" />
   <link rel="icon" href="./assets/chestnut.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
-  <link rel="stylesheet" href="./assets/style.css" />
+  <link rel="stylesheet" href="./assets/style.css?v=20260810-8" />
 </head>
 <body class="home-page">
   <!-- 动态模糊背景 -->
@@ -58,29 +58,40 @@
           </div>
           <div class="recent-list" id="recentPosts"><p class="recent-loading">正在翻找栗子…</p></div>
         </section>
+        <section class="snapshot-panel" aria-label="站点此刻">
+          <div class="calendar-meta">
+            <div class="calendar-heading">
+              <div><p>本站日历</p><strong id="calendarMonth">--</strong></div>
+              <div class="calendar-actions">
+                <button id="calendarToday" type="button" title="回到今天所在月份">今天</button>
+                <time id="clockTime">--:--</time>
+              </div>
+            </div>
+            <span class="calendar-date" id="clockDate">--</span>
+          </div>
+          <div class="calendar-core">
+            <button class="calendar-edge previous" id="calendarPrevious" type="button" aria-label="查看上个月">←</button>
+            <div class="calendar-week" aria-hidden="true"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+            <div class="site-calendar" id="siteCalendar" aria-label="文章发布与更新日历"></div>
+            <button class="calendar-edge next" id="calendarNext" type="button" aria-label="查看下个月">→</button>
+          </div>
+          <div class="calendar-legend"><span><i class="calendar-dot new"></i>新文章</span><span><i class="calendar-dot updated"></i>有更新</span></div>
+        </section>
+        <section class="learning-preview-panel" aria-labelledby="learning-preview-title">
+          <div class="panel-heading compact">
+            <div><p>LEARNING NOW</p><h2 id="learning-preview-title">最近学习路径</h2></div>
+            <a href="./maps.html">全部地图 →</a>
+          </div>
+          <div class="learning-preview-tree" id="learningPreview"><p class="recent-loading">正在加载路径…</p></div>
+        </section>
       </section>
 
       <section class="home-lower">
         <section class="collections-panel" aria-labelledby="collections-title">
           <div class="panel-heading compact"><div><p>COLLECTIONS</p><h2 id="collections-title">从专题开始</h2></div><a href="./topics.html">查看全部 →</a></div>
-          <div class="collection-grid">
-            <a class="collection-card agent" href="./posts.html?cat=Agent"><span>🤖</span><strong>Agent</strong><small>智能体与工作流</small></a>
-            <a class="collection-card python" href="./posts.html?cat=Python教程"><span>🐍</span><strong>Python</strong><small>环境、代码与实践</small></a>
-            <a class="collection-card tools" href="./posts.html?cat=工具教程"><span>🛠️</span><strong>工具</strong><small>更顺手的日常</small></a>
-            <a class="collection-card life" href="./posts.html?cat=生活"><span>🌿</span><strong>生活</strong><small>一些碎碎念</small></a>
-          </div>
+          <div class="collection-grid" id="collectionGrid"><p class="recent-loading">正在加载专题…</p></div>
         </section>
 
-        <aside class="home-utilities" aria-label="小工具">
-          <section class="utility-card time-widget">
-            <p>现在时间</p><strong id="clockTime">--:--</strong><span id="clockDate">--</span>
-          </section>
-          <section class="utility-card archive-widget" aria-labelledby="archive-title">
-            <p id="archive-title">站点索引</p>
-            <div class="archive-stats" id="siteStats"><span>正在整理文章…</span></div>
-            <a href="./posts.html">从文章开始阅读 →</a>
-          </section>
-        </aside>
       </section>
     </main>
 
@@ -88,7 +99,7 @@
 
   </div>
 
-  <script src="./assets/bg.js"></script>
-  <script src="./assets/home.js"></script>
+  <script src="./assets/bg.js?v=20260810-8"></script>
+  <script src="./assets/home.js?v=20260810-8"></script>
 </body>
 </html>

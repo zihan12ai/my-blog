@@ -1,75 +1,80 @@
-// 文章渲染通用脚本：用于 posts.html（近期文章）和 topics.html（专题）
-// 元素不存在则跳过对应渲染；支持 URL ?cat=预选分类
+// 文章与专题页共用：文章来自 posts.json，专题的名称、图标和简介来自 Decap 内容。
 (async () => {
-  const CAT_ICON = { 'Python教程': '🐍', '工具教程': '🛠️', 'Agent': '🤖', '生活': '🌿' };
-  const CAT_DESC = {
-    'Python教程': '工具链、环境配置与数据分析实践',
-    '工具教程': '日常开发与生活常用工具教程',
-    'Agent': '大模型智能体开发实践与范式笔记',
-    '生活': '记录生活的碎碎念',
-  };
-
+  const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
+  })[char]);
   const grid = document.getElementById('postGrid');
   const filterBar = document.getElementById('filterBar');
   const topicGrid = document.getElementById('topicGrid');
-
   let posts = [];
+  let topics = [];
+
   try {
-    const res = await fetch('./assets/posts.json');
-    posts = await res.json();
-  } catch (e) {
-    if (grid) grid.innerHTML = '<div class="loading">文章加载失败（需 http 访问，不能用 file://）</div>';
+    const response = await fetch('./assets/posts.json');
+    if (!response.ok) throw new Error('Unable to load posts');
+    posts = await response.json();
+  } catch {
+    if (grid) grid.innerHTML = '<div class="loading">文章暂时加载失败，请稍后再试。</div>';
+    if (topicGrid) topicGrid.innerHTML = '<div class="loading">专题暂时加载失败，请稍后再试。</div>';
     return;
   }
 
+  try {
+    const response = await fetch('./assets/topics.json');
+    if (response.ok) topics = await response.json();
+  } catch { /* 没有专题文件时仍保留文章浏览。 */ }
+
   posts.sort((a, b) => (b.updated || b.published).localeCompare(a.updated || a.published));
-
-  // URL 预选分类（来自专题页跳转）
+  const postCategories = Array.from(new Set(posts.map(post => post.category)));
+  const topicNames = topics.map(topic => topic.title);
+  const categories = [...topicNames, ...postCategories.filter(category => !topicNames.includes(category))];
+  const topicRecords = [
+    ...topics,
+    ...postCategories.filter(category => !topicNames.includes(category)).map(title => ({ title, icon: '🗂️', description: '' })),
+  ];
   const params = new URLSearchParams(location.search);
-  let activeCat = params.get('cat') || '全部';
+  let activeCategory = params.get('cat') || '全部';
 
-  // —— 列表页渲染 ——
   if (grid) {
-    const cats = ['全部', ...Array.from(new Set(posts.map(p => p.category)))];
     function renderFilter() {
       if (!filterBar) return;
-      filterBar.innerHTML = cats.map(c =>
-        `<button class="filter-chip ${c === activeCat ? 'active' : ''}" data-cat="${c}">${c}</button>`
+      filterBar.innerHTML = ['全部', ...categories].map(category =>
+        `<button class="filter-chip ${category === activeCategory ? 'active' : ''}" data-cat="${escapeHTML(category)}">${escapeHTML(category)}</button>`
       ).join('');
-      filterBar.querySelectorAll('.filter-chip').forEach(btn => {
-        btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderFilter(); renderList(); });
+      filterBar.querySelectorAll('.filter-chip').forEach(button => {
+        button.addEventListener('click', () => {
+          activeCategory = button.dataset.cat;
+          renderFilter();
+          renderList();
+        });
       });
     }
     function renderList() {
-      const list = activeCat === '全部' ? posts : posts.filter(p => p.category === activeCat);
-      if (!list.length) { grid.innerHTML = '<div class="loading">暂无文章</div>'; return; }
-      grid.innerHTML = list.map(p => `
-        <a class="post-card" href="./post-${p.slug}.html">
-          <div class="cover"></div>
-          <h3>${p.title}</h3>
-          <p>${p.summary}</p>
-          <div class="post-meta">
-            <span class="cat">${p.category}</span>
-            <span class="date">${p.updated || p.published}</span>
-          </div>
-        </a>
-      `).join('');
+      const list = activeCategory === '全部' ? posts : posts.filter(post => post.category === activeCategory);
+      if (!list.length) {
+        grid.innerHTML = '<div class="loading">这个专题暂时还没有文章。</div>';
+        return;
+      }
+      grid.innerHTML = list.map(post => `<a class="post-card" href="./post-${encodeURIComponent(post.slug)}.html">
+        <div class="cover"></div><h3>${escapeHTML(post.title)}</h3><p>${escapeHTML(post.summary)}</p>
+        <div class="post-meta"><span class="cat">${escapeHTML(post.category)}</span><span class="date">${escapeHTML(post.updated || post.published)}</span></div>
+      </a>`).join('');
     }
     renderFilter();
     renderList();
   }
 
-  // —— 专题页渲染：点专题 → 跳列表页并带 ?cat= ——
   if (topicGrid) {
-    const groups = {};
-    posts.forEach(p => { (groups[p.category] = groups[p.category] || []).push(p); });
-    topicGrid.innerHTML = Object.entries(groups).map(([cat, arr]) => `
-      <a class="topic-card" href="./posts.html?cat=${encodeURIComponent(cat)}">
-        <div class="tc-icon">${CAT_ICON[cat] || '📁'}</div>
-        <div class="tc-title">${cat}</div>
-        <div class="tc-count">${arr.length} 篇</div>
-        <div class="tc-desc">${CAT_DESC[cat] || ''}</div>
-      </a>
-    `).join('');
+    if (!topicRecords.length) {
+      topicGrid.innerHTML = '<div class="loading">还没有专题，去 Decap 后台新建第一个吧。</div>';
+      return;
+    }
+    topicGrid.innerHTML = topicRecords.map(topic => {
+      const count = posts.filter(post => post.category === topic.title).length;
+      return `<a class="topic-card" href="./posts.html?cat=${encodeURIComponent(topic.title)}">
+        <div class="tc-icon">${escapeHTML(topic.icon || '🗂️')}</div><div class="tc-title">${escapeHTML(topic.title)}</div>
+        <div class="tc-count">${count} 篇</div><div class="tc-desc">${escapeHTML(topic.description || '')}</div>
+      </a>`;
+    }).join('');
   }
 })();

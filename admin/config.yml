@@ -34,13 +34,60 @@ collections:
     fields:
       - { label: "标题", name: "title", widget: "string" }
       - { label: "链接标识 slug", name: "slug", widget: "string", hint: "英文短横线标识，用于 URL，如 conda-to-uv" }
-      - label: "分类"
+      - label: "专题"
         name: "category"
-        widget: "select"
-        options: ["Agent", "Python教程", "工具教程", "生活"]
+        widget: "relation"
+        collection: "topics"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
         default: "工具教程"
       - { label: "标签", name: "tags", widget: "list", default: [], hint: "一行一个" }
       - { label: "摘要", name: "summary", widget: "text" }
       - { label: "发布日期", name: "published", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "更新日期", name: "updated", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false, hint: "改动文章时更新此项；晚于发布日期则首页显示[有更新]" }
       - { label: "正文", name: "body", widget: "markdown" }
+
+  - name: "topics"
+    label: "专题"
+    label_singular: "专题"
+    folder: "content/topics"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    sort: "order:asc"
+    summary: "{{title}}"
+    fields:
+      - { label: "专题名称", name: "title", widget: "string" }
+      - { label: "文件标识 slug", name: "slug", widget: "string", hint: "英文短横线标识，例如 reading" }
+      - { label: "图标", name: "icon", widget: "string", default: "🗂️", hint: "可直接填一个 emoji" }
+      - { label: "专题简介", name: "description", widget: "text" }
+      - { label: "排序", name: "order", widget: "number", value_type: "int", default: 99, hint: "数字越小越靠前" }
+
+  - name: "learning_maps"
+    label: "学习路径"
+    label_singular: "学习路径"
+    folder: "content/maps"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    sort: "order:asc"
+    summary: "{{title}}"
+    fields:
+      - { label: "路径名称", name: "title", widget: "string" }
+      - { label: "文件标识 slug", name: "slug", widget: "string", hint: "英文短横线标识，例如 ai-coding" }
+      - { label: "图标", name: "icon", widget: "string", default: "🧠", hint: "可直接填一个 emoji" }
+      - { label: "状态小字", name: "status", widget: "string", default: "IN PROGRESS" }
+      - { label: "路径简介", name: "description", widget: "text" }
+      - { label: "排序", name: "order", widget: "number", value_type: "int", default: 99, hint: "数字越小越靠前" }
+      - { label: "首页优先展示", name: "featured", widget: "boolean", default: false }
+      - label: "路径节点"
+        name: "nodes"
+        widget: "list"
+        fields:
+          - { label: "节点名称", name: "label", widget: "string" }
+          - { label: "跳转链接", name: "link", widget: "string", required: false, hint: "可填文章路径 ./post-xxx.html、分类路径 ./posts.html?cat=Agent，或网址" }

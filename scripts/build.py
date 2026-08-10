@@ -12,6 +12,10 @@ import os, re, json, sys, glob, html
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 POSTS_DIR = os.path.join(ROOT, 'posts')
 OUT_JSON = os.path.join(ROOT, 'assets', 'posts.json')
+TOPICS_DIR = os.path.join(ROOT, 'content', 'topics')
+MAPS_DIR = os.path.join(ROOT, 'content', 'maps')
+OUT_TOPICS_JSON = os.path.join(ROOT, 'assets', 'topics.json')
+OUT_MAPS_JSON = os.path.join(ROOT, 'assets', 'maps.json')
 TEMPLATE = os.path.join(ROOT, 'scripts', 'template.html')
 
 ICON = {'Python教程': '🐍', '工具教程': '🛠️', 'Agent': '🤖', '生活': '🌿'}
@@ -29,6 +33,7 @@ def parse_frontmatter(raw):
     fm, body = m.group(1), m.group(2)
     data = {}
     cur_key = None
+    list_item = None
     for line in fm.split('\n'):
         kv = re.match(r'^([A-Za-z_]+):\s*(.*)$', line)
         if kv:
@@ -45,8 +50,21 @@ def parse_frontmatter(raw):
             else:
                 data[key] = val.strip('"\'')
                 cur_key = None
-        elif re.match(r'^\s*-\s+', line) and cur_key:
-            data[cur_key].append(re.sub(r'^\s*-\s+', '', line).strip())
+            list_item = None
+        elif cur_key:
+            object_start = re.match(r'^\s*-\s*([A-Za-z_]+):\s*(.*)$', line)
+            object_field = re.match(r'^\s+([A-Za-z_]+):\s*(.*)$', line)
+            list_value = re.match(r'^\s*-\s+(.+)$', line)
+            if object_start:
+                key, val = object_start.groups()
+                list_item = {key: val.strip().strip('"\'')}
+                data[cur_key].append(list_item)
+            elif object_field and isinstance(list_item, dict):
+                key, val = object_field.groups()
+                list_item[key] = val.strip().strip('"\'')
+            elif list_value:
+                data[cur_key].append(list_value.group(1).strip())
+                list_item = None
     return data, body
 
 def md_to_html(md):
@@ -215,7 +233,48 @@ def main():
     index.sort(key=lambda x: x.get('updated') or x.get('published'), reverse=True)
     with open(OUT_JSON, 'w', encoding='utf-8') as w:
         json.dump(index, w, ensure_ascii=False, indent=2)
-    print(f'[build] OK: {len(index)} posts -> assets/posts.json + {len(index)} article pages')
+
+    def sort_order(item):
+        try:
+            return int(item.get('order', 999))
+        except (TypeError, ValueError):
+            return 999
+
+    topics = []
+    for f in sorted(glob.glob(os.path.join(TOPICS_DIR, '*.md'))):
+        data, _ = parse_frontmatter(open(f, encoding='utf-8').read())
+        slug = data.get('slug') or os.path.splitext(os.path.basename(f))[0]
+        topics.append({
+            'title': data.get('title', slug),
+            'slug': slug,
+            'icon': data.get('icon', '🗂️'),
+            'description': data.get('description', ''),
+            'order': sort_order(data),
+        })
+    topics.sort(key=sort_order)
+    with open(OUT_TOPICS_JSON, 'w', encoding='utf-8') as w:
+        json.dump(topics, w, ensure_ascii=False, indent=2)
+
+    maps = []
+    for f in sorted(glob.glob(os.path.join(MAPS_DIR, '*.md'))):
+        data, _ = parse_frontmatter(open(f, encoding='utf-8').read())
+        slug = data.get('slug') or os.path.splitext(os.path.basename(f))[0]
+        nodes = [node for node in data.get('nodes', []) if isinstance(node, dict)]
+        maps.append({
+            'title': data.get('title', slug),
+            'slug': slug,
+            'icon': data.get('icon', '🧠'),
+            'status': data.get('status', 'IN PROGRESS'),
+            'description': data.get('description', ''),
+            'order': sort_order(data),
+            'featured': str(data.get('featured', '')).lower() == 'true',
+            'nodes': nodes,
+        })
+    maps.sort(key=sort_order)
+    with open(OUT_MAPS_JSON, 'w', encoding='utf-8') as w:
+        json.dump(maps, w, ensure_ascii=False, indent=2)
+
+    print(f'[build] OK: {len(index)} posts, {len(topics)} topics, {len(maps)} maps')
 
 if __name__ == '__main__':
     main()

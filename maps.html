@@ -7,7 +7,7 @@
   <meta name="description" content="算栗工坊的学习主题地图。" />
   <link rel="icon" href="./assets/chestnut.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" />
-  <link rel="stylesheet" href="./assets/style.css" />
+  <link rel="stylesheet" href="./assets/style.css?v=20260810-8" />
 </head>
 <body class="maps-page">
   <div class="bg-canvas-wrap"><canvas data-bg></canvas></div>
@@ -27,28 +27,11 @@
         <h1>知识<span>地图</span></h1>
         <p>把正在学习的主题先画成树，再从节点进入具体文章。</p>
       </header>
-      <section class="map-grid" aria-label="知识地图列表">
-        <article class="map-card">
-          <div class="map-card-heading"><span>🧩</span><div><p>IN PROGRESS</p><h2>AI Coding</h2></div></div>
-          <ul class="map-tree">
-            <li><span>AI Coding</span>
-              <ul>
-                <li><a href="./post-claude-code-cc-switch.html">Claude Code + CC Switch</a></li>
-                <li><a href="./post-open-code.html">OpenCode</a></li>
-                <li><a href="./posts.html?cat=Agent">Agent</a></li>
-              </ul>
-            </li>
-          </ul>
-        </article>
-        <article class="map-card map-card-empty">
-          <span>＋</span>
-          <h2>下一张地图</h2>
-          <p>以后可以在这里加入 Python、工具链、读书或任何正在生长的主题。</p>
-        </article>
-      </section>
+      <section class="map-grid" id="mapGrid" aria-label="知识地图列表"><p class="loading">正在加载知识地图…</p></section>
     </main>
     <footer class="home-footer">© 2026 算栗工坊 · 每个知识点，都值得举个栗子。</footer>
   </div>
-  <script src="./assets/bg.js"></script>
+  <script src="./assets/bg.js?v=20260810-8"></script>
+  <script src="./assets/maps.js?v=20260810-8"></script>
 </body>
 </html>
