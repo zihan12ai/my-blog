@@ -1,8 +1,8 @@
 # 构建产物（由 GitHub Action / build.py 自动生成，不入库）
-post-*.html
-assets/posts.json
-assets/topics.json
-assets/maps.json
+docs/post-*.html
+docs/assets/posts.json
+docs/assets/topics.json
+docs/assets/maps.json
 
 # 依赖与缓存
 node_modules/

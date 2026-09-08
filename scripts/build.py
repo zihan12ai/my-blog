@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 算栗工坊 构建脚本：
-扫描 posts/*.md -> 生成 assets/posts.json（首页索引）+ 每篇文章静态页 post-<slug>.html
+扫描 posts/*.md -> 生成 docs/assets/posts.json（首页索引）+ 每篇文章静态页 docs/post-<slug>.html
 本地运行：  python scripts/build.py
 线上运行：  GitHub Action 调用同一脚本
 零第三方依赖（仅标准库）。
@@ -10,12 +10,15 @@
 import os, re, json, sys, glob, html
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# 发布物（手写页面 + assets + 构建产物）统一落在 docs/
+OUT_DIR = os.path.join(ROOT, 'docs')
+OUT_ASSETS = os.path.join(OUT_DIR, 'assets')
 POSTS_DIR = os.path.join(ROOT, 'posts')
-OUT_JSON = os.path.join(ROOT, 'assets', 'posts.json')
+OUT_JSON = os.path.join(OUT_ASSETS, 'posts.json')
 TOPICS_DIR = os.path.join(ROOT, 'content', 'topics')
 MAPS_DIR = os.path.join(ROOT, 'content', 'maps')
-OUT_TOPICS_JSON = os.path.join(ROOT, 'assets', 'topics.json')
-OUT_MAPS_JSON = os.path.join(ROOT, 'assets', 'maps.json')
+OUT_TOPICS_JSON = os.path.join(OUT_ASSETS, 'topics.json')
+OUT_MAPS_JSON = os.path.join(OUT_ASSETS, 'maps.json')
 TEMPLATE = os.path.join(ROOT, 'scripts', 'template.html')
 
 ICON = {'Python教程': '🐍', '工具教程': '🛠️', 'Agent': '🤖', '生活': '🌿'}
@@ -194,6 +197,7 @@ def build_toc(md):
 def main():
     if not os.path.isdir(POSTS_DIR):
         print('posts 目录不存在'); sys.exit(1)
+    os.makedirs(OUT_ASSETS, exist_ok=True)
     files = sorted(glob.glob(os.path.join(POSTS_DIR, '*.md')))
     index = []
     template = ''
@@ -227,7 +231,7 @@ def main():
             # 使用函数替换，避免 Markdown 代码块中的反斜杠被 re.sub 当作转义序列。
             html = re.sub(r'<div class="article-body">[\s\S]*?</div>', lambda _: article_body, html, count=1)
             html = html.replace('__TOC__', build_toc(body))
-            with open(os.path.join(ROOT, f'post-{slug}.html'), 'w', encoding='utf-8') as w:
+            with open(os.path.join(OUT_DIR, f'post-{slug}.html'), 'w', encoding='utf-8') as w:
                 w.write(html)
 
     index.sort(key=lambda x: x.get('updated') or x.get('published'), reverse=True)

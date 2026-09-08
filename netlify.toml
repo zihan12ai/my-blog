@@ -2,7 +2,7 @@
 # 构建全交给 Netlify（不再用 GitHub Action，避免重复）
 [build]
   command = "python scripts/build.py"
-  publish = "."
+  publish = "docs"
 
 # JSON 正确 content-type
 [[headers]]

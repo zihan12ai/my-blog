@@ -8,9 +8,9 @@
 ## 一、本地预览（不依赖 Node）
 
 ```bash
-cd lvy-neko-clone
-python scripts/build.py        # 生成文章页和索引（首次或改了文章后跑）
-python -m http.server 8765     # 起本地服务
+python scripts/build.py        # 生成文章页和索引到 docs/（首次或改了文章后跑）
+cd docs
+python -m http.server 8765     # 在 docs/ 下起本地服务
 ```
 浏览器开 http://localhost:8765 （必须 http，不能用 file://）。
 
@@ -57,33 +57,34 @@ git push -u origin main
 
 ```
 my-blog/
-├── index.html              首页（漂浮卡片 + 文章列表 + 专题）
-├── about.html              关于页
-├── posts.html              文章列表页（按分类筛选）
-├── topics.html             专题页
-├── maps.html               知识地图页
-├── posts/                  ★ 你写的文章（Markdown + frontmatter）
-├── content/                专题与学习路径数据（Markdown + frontmatter）
+├── docs/                   ★ 发布目录（Netlify publish 指向这里）
+│   ├── index.html          首页（漂浮卡片 + 文章列表 + 专题）
+│   ├── about.html          关于页
+│   ├── posts.html          文章列表页（按分类筛选）
+│   ├── topics.html         专题页
+│   ├── maps.html           知识地图页
+│   ├── assets/             样式/脚本/头像/光标/数据
+│   │   ├── style.css       全站样式
+│   │   ├── home.js         首页交互（音乐/时钟/随手记等）
+│   │   ├── article.js      文章页交互
+│   │   ├── posts.js        文章与专题渲染
+│   │   ├── maps.js         知识地图渲染
+│   │   ├── bg.js           背景动效
+│   │   ├── chestnut.png    头像/栗子图标
+│   │   ├── cursor.svg      自定义光标
+│   │   ├── posts.json      构建产物：文章索引
+│   │   ├── topics.json     构建产物：专题索引
+│   │   └── maps.json       构建产物：地图索引
+│   └── post-*.html         构建产物：每篇文章静态页（build.py 生成，已 .gitignore 忽略）
+├── posts/                  ★ 你写的文章源（Markdown + frontmatter）
+├── content/                专题与学习路径数据源（Markdown + frontmatter）
 │   ├── topics/
 │   └── maps/
 ├── scripts/
-│   ├── build.py            构建脚本：md → posts.json + 文章页
+│   ├── build.py            构建脚本：md → docs/assets/*.json + docs/post-*.html
 │   └── template.html       文章页模板
-├── assets/                 样式/脚本/头像/光标/数据
-│   ├── style.css           全站样式
-│   ├── home.js             首页交互（音乐/时钟/随手记等）
-│   ├── article.js          文章页交互
-│   ├── posts.js            文章与专题渲染
-│   ├── maps.js             知识地图渲染
-│   ├── bg.js               背景动效
-│   ├── chestnut.png        头像/栗子图标
-│   ├── cursor.svg          自定义光标
-│   ├── posts.json          构建产物：文章索引
-│   ├── topics.json         构建产物：专题索引
-│   └── maps.json           构建产物：地图索引
-├── post-*.html             构建产物：每篇文章的静态页（build.py 生成，已 .gitignore 忽略）
 ├── .gitignore              忽略构建产物
-└── netlify.toml            Netlify 部署配置（构建+发布）
+└── netlify.toml            Netlify 部署配置（build command + publish=docs）
 ```
 
 ## 四、文章 frontmatter 模板
