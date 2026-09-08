@@ -56,8 +56,12 @@ git push -u origin main
 ## 三、目录结构
 
 ```
-lvy-neko-clone/
+my-blog/
 ├── index.html              首页（漂浮卡片 + 文章列表 + 专题）
+├── about.html              关于页
+├── posts.html              文章列表页（按分类筛选）
+├── topics.html             专题页
+├── maps.html               知识地图页
 ├── posts/                  ★ 你写的文章（Markdown + frontmatter）
 ├── content/                专题与学习路径数据（Markdown + frontmatter）
 │   ├── topics/
@@ -65,7 +69,19 @@ lvy-neko-clone/
 ├── scripts/
 │   ├── build.py            构建脚本：md → posts.json + 文章页
 │   └── template.html       文章页模板
-├── assets/                 样式/脚本/头像/光标/上传图
+├── assets/                 样式/脚本/头像/光标/数据
+│   ├── style.css           全站样式
+│   ├── home.js             首页交互（音乐/时钟/随手记等）
+│   ├── article.js          文章页交互
+│   ├── posts.js            文章与专题渲染
+│   ├── maps.js             知识地图渲染
+│   ├── bg.js               背景动效
+│   ├── chestnut.png        头像/栗子图标
+│   ├── cursor.svg          自定义光标
+│   ├── posts.json          构建产物：文章索引
+│   ├── topics.json         构建产物：专题索引
+│   └── maps.json           构建产物：地图索引
+├── post-*.html             构建产物：每篇文章的静态页（build.py 生成，已 .gitignore 忽略）
 ├── .gitignore              忽略构建产物
 └── netlify.toml            Netlify 部署配置（构建+发布）
 ```
