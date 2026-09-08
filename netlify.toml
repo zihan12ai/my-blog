@@ -4,12 +4,6 @@
   command = "python scripts/build.py"
   publish = "."
 
-# admin 后台路由（访问 /admin 自动落到 index.html）
-[[redirects]]
-  from = "/admin"
-  to = "/admin/index.html"
-  status = 200
-
 # JSON 正确 content-type
 [[headers]]
   for = "/*.json"
@@ -21,13 +15,3 @@
   [headers.values]
     Content-Type = "application/json; charset=utf-8"
 
-# YAML 正确 content-type（让 Decap CMS 能 fetch config.yml，而不是触发下载）
-[[headers]]
-  for = "/*.yml"
-  [headers.values]
-    Content-Type = "text/yaml; charset=utf-8"
-
-[[headers]]
-  for = "/admin/*.yml"
-  [headers.values]
-    Content-Type = "text/yaml; charset=utf-8"

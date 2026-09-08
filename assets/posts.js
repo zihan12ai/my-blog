@@ -1,4 +1,4 @@
-// 文章与专题页共用：文章来自 posts.json，专题的名称、图标和简介来自 Decap 内容。
+// 文章与专题页共用：文章来自 posts.json，专题的名称、图标和简介来自 content/topics。
 (async () => {
   const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
@@ -66,7 +66,7 @@
 
   if (topicGrid) {
     if (!topicRecords.length) {
-      topicGrid.innerHTML = '<div class="loading">还没有专题，去 Decap 后台新建第一个吧。</div>';
+      topicGrid.innerHTML = '<div class="loading">还没有专题。</div>';
       return;
     }
     topicGrid.innerHTML = topicRecords.map(topic => {

@@ -1,4 +1,4 @@
-// 知识地图由 Decap CMS 的 content/maps/*.md 构建为 assets/maps.json。
+// 知识地图由 content/maps/*.md 构建为 assets/maps.json。
 (() => {
   const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
@@ -13,7 +13,7 @@
       if (!response.ok) throw new Error('Unable to load maps');
       const maps = await response.json();
       if (!maps.length) {
-        grid.innerHTML = '<article class="map-card map-card-empty"><span>＋</span><h2>还没有地图</h2><p>去 Decap 后台新建第一张学习路径吧。</p></article>';
+        grid.innerHTML = '<article class="map-card map-card-empty"><span>＋</span><h2>还没有地图</h2><p>新建第一张学习路径吧。</p></article>';
         return;
       }
       grid.innerHTML = maps.map(map => {
