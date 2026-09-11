@@ -34,7 +34,6 @@
       calendarPosts = posts;
       renderSiteCalendar();
       renderTopics();
-      renderLearningPreview();
       if (!recent.length) {
         list.innerHTML = '<p class="recent-loading">还没有文章，去写第一篇吧。</p>';
         return;
@@ -78,27 +77,7 @@
     }
   }
 
-  async function renderLearningPreview() {
-    const target = document.getElementById('learningPreview');
-    if (!target) return;
-    try {
-      const response = await fetch('./assets/maps.json');
-      if (!response.ok) throw new Error('Unable to load maps');
-      const maps = await response.json();
-      const map = maps.find(item => item.featured) || maps[0];
-      if (!map) {
-        target.innerHTML = '<p class="recent-loading">还没有学习路径，去后台画第一张地图吧。</p>';
-        return;
-      }
-      const nodes = (map.nodes || []).slice(0, 5);
-      target.innerHTML = `<span class="learning-root">${escapeHTML(map.title)}</span><div class="learning-branches">${nodes.map(node =>
-        `<a href="${safeHref(node.link, './maps.html')}">${escapeHTML(node.label || '未命名节点')}</a>`
-      ).join('')}</div>`;
-    } catch {
-      target.innerHTML = '<p class="recent-loading">学习路径暂时加载失败。</p>';
-    }
-  }
-
+  
   function renderSiteCalendar() {
     const calendar = document.getElementById('siteCalendar');
     const monthLabel = document.getElementById('calendarMonth');
