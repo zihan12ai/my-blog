@@ -388,7 +388,7 @@ body.home-page { height: auto; min-height: 100vh; overflow-x: hidden; overflow-y
 .home-page-shell { height: auto; min-height: 100vh; overflow: visible; }
 .home-page .navbar { max-width: 1180px; margin: 0 auto; padding-left: 1.25rem; padding-right: 1.25rem; background: transparent; border: 0; }
 .home-main { width: min(1120px, calc(100% - 2.5rem)); margin: 2.5rem auto 0; }
-.home-hero { display: grid; grid-template-columns: minmax(280px, .92fr) minmax(285px, 1.3fr); grid-template-rows: auto minmax(275px, 1fr); gap: 1.25rem; align-items: stretch; }
+.home-hero { display: grid; grid-template-columns: minmax(280px, 1.05fr) minmax(285px, 1.05fr); grid-template-rows: auto minmax(275px, 1fr); gap: 1.25rem; align-items: stretch; }
 .profile-panel, .latest-panel, .snapshot-panel, .collections-panel, .utility-card {
   border: 1px solid rgba(255,255,255,.76); box-shadow: 0 16px 38px rgba(111,75,37,.11);
   backdrop-filter: blur(16px);
@@ -435,7 +435,7 @@ body.about-page { min-height: 100vh; overflow-x: hidden; overflow-y: auto; }.abo
 @media (min-width: 901px) {
   .home-main { width: min(1140px, calc(100% - 3rem)); }
   .home-hero {
-    grid-template-columns: minmax(260px, .86fr) minmax(355px, 1.18fr) minmax(178px, .56fr);
+    grid-template-columns: minmax(260px, 1fr) minmax(355px, 1fr);
     grid-template-rows: minmax(170px, auto) 292px;
     gap: 1.05rem;
   }
